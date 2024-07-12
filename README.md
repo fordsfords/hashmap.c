@@ -160,6 +160,20 @@ heap space. DO NOT RETAIN POINTERS RETURNED BY HASHMAP CALLS!  It is
 common to copy the contents of the item into your storage immediately
 following a call that returns an item pointer.
 
+The functions "hashmap_new()", "hashmap_new_with_allocator()", and
+"hashmap_scan()" take as their final parameter "udata". This is a void
+pointer that the hashmap code does not use. It is simply passed to
+your callback functions "compare()" and "iter()", and is provided as
+a convenient way for you to manage your own state. For example, let's
+say you want your compare function to be either case sensitive or
+case insensitive, depending on a runtime option. An obvious way of
+implementing this runtime option would be a global variable that your
+code sets during initialization and uses in your compare function.
+However, suppose you have multiple uses for hashmaps, and you don't
+want all of them to follow that option? The "udata" lets you create a
+hashmap-specific structure that gives your compare function operational
+parameters.
+
 NOT THREAD SAFE. If you are using hashmap with multiple threads, you
 must provide locking to prevent concurrent calls. Note that it is NOT
 sufficient to add the locks to the hashmap code itself. Remember that

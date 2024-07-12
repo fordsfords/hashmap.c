@@ -178,6 +178,8 @@ struct hashmap *hashmap_new_with_allocator(void *(*_malloc)(size_t),
 // The hashmap must be freed with hashmap_free(). 
 // Param `elfree` is a function that frees a specific item. This should be NULL
 // unless you're storing some kind of reference data in the hash.
+// Param `udata` is a pointer for the use of your application. Hashmap does not
+// use it, it simply passes it to your compare function.
 struct hashmap *hashmap_new(size_t elsize, size_t cap, uint64_t seed0, 
     uint64_t seed1,
     uint64_t (*hash)(const void *item, uint64_t seed0, uint64_t seed1),
@@ -433,6 +435,8 @@ bool hashmap_oom(struct hashmap *map) {
 
 // hashmap_scan iterates over all items in the hash map
 // Param `iter` can return false to stop iteration early.
+// Param `udata` is a pointer for the use of your application. Hashmap does not
+// use it, it simply passes it to your iter function.
 // Returns false if the iteration has been stopped early.
 bool hashmap_scan(struct hashmap *map, 
     bool (*iter)(const void *item, void *udata), void *udata)
